@@ -14,22 +14,88 @@ const seed = (data) => {
       )`);
     })
     .then(() => {
+      const formattedUsers = userData.map((user) => [
+        user.username,
+        user.avatar_url,
+        user.name,
+      ]);
+      const sql = format(
+        `INSERT INTO users (username, avatar_url, name) VALUES %L RETURNING *`,
+        formattedUsers
+      );
+      return db.query(sql);
+    })
+    .then(() => {
       return db.query(`CREATE TABLE topics (
       slug TEXT PRIMARY KEY,
-      description TEXT NOT NULL 
+      description TEXT 
     )`);
+    })
+    .then(() => {
+      const formattedTopics = topicData.map((topic) => [
+        topic.slug,
+        topic.description,
+      ]);
+      const sql = format(
+        `INSERT INTO topics (slug, description) VALUES %L RETURNING *`,
+        formattedTopics
+      );
+      return db.query(sql);
     })
     .then(() => {
       return db.query(`CREATE TABLE articles (
         article_id SERIAL PRIMARY KEY,
         title TEXT,
-        body TEXT NOT NULL,
-        votes INT,
+        body TEXT,
+        votes INT DEFAULT 0,
         topic TEXT REFERENCES topics(slug),
         author TEXT REFERENCES users(username),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`);
     })
+    .then(() => {
+      const formattedArticles = articleData.map((article) => [
+        article.title,
+        article.body,
+        article.votes,
+        article.topic,
+        article.author,
+        article.created_at,
+      ]);
+      
+      const sql = format(
+        `INSERT INTO articles ( title, body, votes, topic, author, created_at) VALUES %L RETURNING *`,
+        formattedArticles
+      );
+      return db.query(sql);
+    })
+    .then(() => {
+      return db.query(`CREATE TABLE comments (
+        comment_id SERIAL PRIMARY KEY,
+        author TEXT REFERENCES users(username),
+        article_id SERIAL REFERENCES articles(article_id),
+        votes INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        body TEXT
+      )`);
+    })
+    .then(() => {
+      const formattedComments = commentData.map((comment) => [
+        
+        comment.author,
+        comment.article_id,
+        comment.votes,
+        comment.created_at,
+        comment.body
+      ]);
+      ;
+      const sql = format(
+        `INSERT INTO comments ( author, article_id, votes, created_at, body) VALUES %L RETURNING *`,
+        formattedComments
+      );
+      console.log(formattedComments, "<<<")
+      return db.query(sql);
+    });
 };
 
 module.exports = seed;
