@@ -3,7 +3,6 @@ const format = require("pg-format");
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
-  // 1. create tables
   return db
     .query(`DROP TABLE IF EXISTS comments, articles, topics, users;`)
     .then(() => {
@@ -62,7 +61,7 @@ const seed = (data) => {
         article.author,
         article.created_at,
       ]);
-      
+
       const sql = format(
         `INSERT INTO articles ( title, body, votes, topic, author, created_at) VALUES %L RETURNING *`,
         formattedArticles
@@ -81,20 +80,20 @@ const seed = (data) => {
     })
     .then(() => {
       const formattedComments = commentData.map((comment) => [
-        
         comment.author,
         comment.article_id,
         comment.votes,
         comment.created_at,
-        comment.body
+        comment.body,
       ]);
-      ;
       const sql = format(
         `INSERT INTO comments ( author, article_id, votes, created_at, body) VALUES %L RETURNING *`,
         formattedComments
       );
-      console.log(formattedComments, "<<<")
       return db.query(sql);
+    })
+    .then((result) => {
+      console.log(result.rows);
     });
 };
 
