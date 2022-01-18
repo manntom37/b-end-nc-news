@@ -91,10 +91,10 @@ const seed = (data) => {
         formattedComments
       );
       return db.query(sql);
-    })
-    .then((result) => {
-      console.log(result.rows);
     });
+  // .then((result) => {
+  //   console.log(result.rows);
+  // });
 };
 
 module.exports = seed;
