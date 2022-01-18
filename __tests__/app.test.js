@@ -36,13 +36,14 @@ test('Get a specific article by article ID', () => {
           article_id: 1,
           title: 'Living in the shadow of a great man',
           body: 'I find this existence challenging',
+          comment_count: "11",
           votes: 100,
           topic: 'mitch',
           author: 'butter_bridge',
           created_at: '2020-07-09T20:11:00.000Z'
         }
       } )
-        console.log(res.body, '< dyma')
+       
     })
 })
 })
