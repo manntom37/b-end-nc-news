@@ -7,7 +7,6 @@ exports.updateArticleById = (article_id, inc_votes) => {
       article_id,
     ])
     .then((res) => {
-        console.log(res.rows, 'model')
       return res.rows[0];
     });
 };
