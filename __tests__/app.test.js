@@ -25,25 +25,60 @@ describe("GET /api/topics", () => {
       });
   });
 });
-describe('GET /api/articles/:article_id', () => {
-test('Get a specific article by article ID', () => {
+describe("GET /api/articles/:article_id", () => {
+  test("Get a specific article by article ID", () => {
     return request(app)
-    .get("/api/articles/1")
-    .expect(200)
-    .then((res) => {
-       expect(res.body).toEqual({
-        article: {
-          article_id: 1,
-          title: 'Living in the shadow of a great man',
-          body: 'I find this existence challenging',
-          comment_count: "11",
-          votes: 100,
-          topic: 'mitch',
-          author: 'butter_bridge',
-          created_at: '2020-07-09T20:11:00.000Z'
-        }
-      } )
-       
-    })
-})
-})
+      .get("/api/articles/1")
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toEqual({
+          article: {
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            body: "I find this existence challenging",
+            comment_count: "11",
+            votes: 100,
+            topic: "mitch",
+            author: "butter_bridge",
+            created_at: "2020-07-09T20:11:00.000Z",
+          },
+        });
+        // console.log(res.body);
+      });
+  });
+});
+describe("PATCH /api/articles/:article_id", () => {
+  test("Patch a specific article by article ID", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: 10 })
+      .expect(200)
+      .then(({ body }) => {
+        // console.log(body.article.votes, '<<< res.text')
+        expect(body.article.votes).toBe(10);
+        expect(body.article.article_id).toBe(2);
+      });
+  });
+  test("Patch a specific article by DECREASING votes", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: -10 })
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body.article.votes, "<<< res.text");
+        expect(body.article.votes).toBe(90);
+        expect(body.article.article_id).toBe(1);
+      });
+  });
+  test("Patch a specific article by INCREASING votes from a default 100", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body.article.votes, "<<< res.text");
+        expect(body.article.votes).toBe(101);
+        expect(body.article.article_id).toBe(1);
+      });
+  });
+});
