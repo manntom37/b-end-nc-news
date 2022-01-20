@@ -7,6 +7,9 @@ const { getArticles } = require("./controllers/getArticles.controllers");
 const {
   patchArticleById,
 } = require("./controllers/patchArticleById.controller");
+const {
+  getArticleByTopic,
+} = require("./controllers/getArticleByTopic.controllers");
 const app = express();
 
 app.use(express.json());
@@ -18,4 +21,5 @@ app.get("/api/articles/:article_id", getArticlesById);
 app.patch("/api/articles/:article_id", patchArticleById);
 
 app.get("/api/articles", getArticles);
+
 module.exports = app;

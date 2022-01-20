@@ -64,7 +64,6 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: -10 })
       .expect(200)
       .then(({ body }) => {
-        console.log(body.article.votes, "<<< no. of votes");
         expect(body.article.votes).toBe(90);
         expect(body.article.article_id).toBe(1);
       });
@@ -75,7 +74,6 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: 1 })
       .expect(200)
       .then(({ body }) => {
-        console.log(body.article.votes, "<<< no. of votes");
         expect(body.article.votes).toBe(101);
         expect(body.article.article_id).toBe(1);
       });
@@ -86,18 +84,32 @@ describe("PATCH /api/articles/:article_id", () => {
         .get("/api/articles")
         .expect(200)
         .then((res) => {
-          console.log(res.body.articles, "<<< articles ");
           expect(res.body.articles).toBeInstanceOf(Array);
         });
     });
-    test("correctly defaults to sort by date, date1 < date2 etc", () => {
+    test("correctly defaults to sort by date, date1 > date2 for desc order", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
         .then((res) => {
           expect(
-            res.body.articles[0].created_at < res.body.articles[1].created_at
+            res.body.articles[0].created_at > res.body.articles[1].created_at
           ).toBe(true);
+        });
+    });
+  });
+  describe("GET /api/articles?topic=mitch", () => {
+    test("responds with 200 code & array of articles", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then((res) => {
+          // console.log(res.body.articles, "<<< articles ");
+          expect(res.body.articles).toBeInstanceOf(Array);
+          res.body.articles.forEach((article) => {
+            expect(article.topic).toBe("mitch");
+            console.log(article.topic, " <<<<< topic");
+          });
         });
     });
   });
