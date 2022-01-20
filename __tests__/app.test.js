@@ -58,6 +58,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.article.article_id).toBe(2);
       });
   });
+
   test("Patch a specific article by DECREASING votes", () => {
     return request(app)
       .patch("/api/articles/1")
@@ -78,39 +79,97 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.article.article_id).toBe(1);
       });
   });
-  describe("GET /api/articles", () => {
-    test("responds with 200 code & array of articles", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then((res) => {
-          expect(res.body.articles).toBeInstanceOf(Array);
+});
+
+describe("GET /api/articles", () => {
+  test("responds with 200 code & array of articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+      });
+  });
+  test("correctly defaults to sort by date, date1 > date2 for desc order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        expect(
+          res.body.articles[0].created_at > res.body.articles[1].created_at
+        ).toBe(true);
+      });
+  });
+});
+describe("GET /api/articles?query=???", () => {
+  test("responds with 200 code & array of articles with topic 'mitch'", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        res.body.articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
         });
-    });
-    test("correctly defaults to sort by date, date1 > date2 for desc order", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then((res) => {
+      });
+  });
+  test("responds with 200 code & array of articles with topic 'cats'", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        res.body.articles.forEach((article) => {
+          expect(article.topic).toBe("cats");
+        });
+      });
+  });
+  test("responds with 200 code & array of articles with author 'rogersop'", () => {
+    return request(app)
+      .get("/api/articles?author=rogersop")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        console.log(res.body.articles, "just rogersop");
+        res.body.articles.forEach((article) => {
+          expect(article.author).toBe("rogersop");
+        });
+      });
+  });
+  test("/api/articles?author=rogersop&order=asc = 200 code & array of articles with author 'rogersop' order by ASC", () => {
+    return request(app)
+      .get("/api/articles?author=rogersop&order=asc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        console.log(res.body.articles, "ROGERSOP asc");
+        res.body.articles.forEach((article) => {
+          expect(article.author).toBe("rogersop");
           expect(
             res.body.articles[0].created_at > res.body.articles[1].created_at
+          ).toBe(false);
+          expect(
+            res.body.articles[1].created_at < res.body.articles[2].created_at
           ).toBe(true);
         });
-    });
+      });
   });
-  describe("GET /api/articles?topic=mitch", () => {
-    test("responds with 200 code & array of articles", () => {
-      return request(app)
-        .get("/api/articles?topic=mitch")
-        .expect(200)
-        .then((res) => {
-          // console.log(res.body.articles, "<<< articles ");
-          expect(res.body.articles).toBeInstanceOf(Array);
-          res.body.articles.forEach((article) => {
-            expect(article.topic).toBe("mitch");
-            console.log(article.topic, " <<<<< topic");
-          });
-        });
-    });
+  test("/api/articles?topic=mitch&sort_by=title&order=asc = 200 code & array of articles with topic 'mitch' order by title ASC", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=title&order=asc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        expect(res.body.articles[0].title).toBe("A");
+      });
+  });
+  test("/api/articles?topic=mitch&sort_by=title&order=desc = 200 code & array of articles with topic 'mitch' order by title DESC", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=title&order=desc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeInstanceOf(Array);
+        expect(res.body.articles[0].title).toBe("Z");
+      });
   });
 });

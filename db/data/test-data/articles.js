@@ -47,7 +47,7 @@ module.exports = [
     created_at: new Date(1602986400000),
     votes: 0
   },
-  {
+  { 
     title: 'Z',
     topic: 'mitch',
     author: 'icellusedkars',
