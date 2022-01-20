@@ -130,7 +130,6 @@ describe("GET /api/articles?query=???", () => {
       .expect(200)
       .then((res) => {
         expect(res.body.articles).toBeInstanceOf(Array);
-        console.log(res.body.articles, "just rogersop");
         res.body.articles.forEach((article) => {
           expect(article.author).toBe("rogersop");
         });
@@ -142,7 +141,6 @@ describe("GET /api/articles?query=???", () => {
       .expect(200)
       .then((res) => {
         expect(res.body.articles).toBeInstanceOf(Array);
-        console.log(res.body.articles, "ROGERSOP asc");
         res.body.articles.forEach((article) => {
           expect(article.author).toBe("rogersop");
           expect(
@@ -170,6 +168,16 @@ describe("GET /api/articles?query=???", () => {
       .then((res) => {
         expect(res.body.articles).toBeInstanceOf(Array);
         expect(res.body.articles[0].title).toBe("Z");
+      });
+  });
+});
+describe("GET /api/articles/:article_id/comments", () => {
+  test("responds with 200 and article comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((res) => {
+       console.log(res.body)
       });
   });
 });

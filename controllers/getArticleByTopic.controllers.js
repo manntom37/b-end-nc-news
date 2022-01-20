@@ -1,9 +1,10 @@
 const {
   fetchArticleByTopic,
 } = require("../models/fetchArticlesByTopic.models");
+
 exports.getArticleByTopic = (req, res) => {
   const { topic } = req.body;
-  //   const { inc_votes } = req.body;
+
   console.log(topic);
   // console.log(article_id)
   fetchArticleByTopic(topic).then((articles) =>
