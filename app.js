@@ -7,9 +7,6 @@ const { getArticles } = require("./controllers/getArticles.controllers");
 const {
   patchArticleById,
 } = require("./controllers/patchArticleById.controller");
-const {
-  getArticleByTopic,
-} = require("./controllers/getArticleByTopic.controllers");
 
 const {
   getArticleComments,

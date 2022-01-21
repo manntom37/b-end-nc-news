@@ -42,7 +42,6 @@ describe("GET /api/articles/:article_id", () => {
             created_at: "2020-07-09T20:11:00.000Z",
           },
         });
-        // console.log(res.body);
       });
   });
 });
@@ -53,7 +52,6 @@ describe("PATCH /api/articles/:article_id", () => {
       .send({ inc_votes: 10 })
       .expect(200)
       .then(({ body }) => {
-        // console.log(body.article.votes, '<<< res.text')
         expect(body.article.votes).toBe(10);
         expect(body.article.article_id).toBe(2);
       });
@@ -172,12 +170,26 @@ describe("GET /api/articles?query=???", () => {
   });
 });
 describe("GET /api/articles/:article_id/comments", () => {
-  test("responds with 200 and article comments", () => {
+  test("responds with 200 and comments for article 1", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.comments.length).toEqual(11);
+        expect(res.body.comments).toBeInstanceOf(Array);
+        res.body.comments.forEach((comment) => {
+          expect(comment.article_id).toEqual(1);
+        });
+      });
+  });
+  test("returns message for artile with no comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
       .then((res) => {
-       console.log(res.body)
+        expect(res.body).toEqual({ comments: "No comments!" });
+
+        console.log(res.body);
       });
   });
 });
