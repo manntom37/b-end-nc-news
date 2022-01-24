@@ -3,6 +3,7 @@ const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const app = require("../app");
+const { get } = require("superagent");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -188,7 +189,37 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then((res) => {
         expect(res.body).toEqual({ comments: "No comments!" });
+      });
+  });
+});
 
+describe("POST comment", () => {
+  test("responds with 201 and posted comment", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "Wow, a passing test!",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((res) => {
+        expect(res.body.comment.body).toBe("Wow, a passing test!");
+      });
+  });
+});
+
+describe("DELETE comment", () => {
+  test("responds with 204", () => {
+    return request(app).delete("/api/comments/1/").expect(204);
+  });
+});
+describe.only("GET API", () => {
+  test("responds with 200 & endpoint JSON", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((res) => {
         console.log(res.body);
       });
   });

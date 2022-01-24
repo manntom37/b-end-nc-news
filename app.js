@@ -11,10 +11,23 @@ const {
 const {
   getArticleComments,
 } = require("./controllers/getArticleComments.controllers");
+
+const {
+  postArticleComment,
+} = require("./controllers/postArticleComment.controllers");
+
+const {
+  removeCommentById,
+} = require("./controllers/removeCommentById.controllers");
+
+const {getAPI} = require('./controllers/getAPI.controller')
+
 const { reduce } = require("./db/data/test-data/articles");
 const app = express();
 
 app.use(express.json());
+
+app.get("/api", getAPI);
 
 app.get("/api/topics", getTopics);
 
@@ -25,6 +38,10 @@ app.patch("/api/articles/:article_id", patchArticleById);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
+
+app.post("/api/articles/:article_id/comments", postArticleComment);
+
+app.delete("/api/comments/:comment_id", removeCommentById);
 
 app.use((err, req, res, next) => {
   console.log(err);
