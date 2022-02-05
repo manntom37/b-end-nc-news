@@ -20,12 +20,12 @@ const {
   removeCommentById,
 } = require("./controllers/removeCommentById.controllers");
 
-const {getAPI} = require('./controllers/getAPI.controller')
-
 const { reduce } = require("./db/data/test-data/articles");
 const app = express();
 
 app.use(express.json());
+
+const { getAPI } = require("./controllers/getAPI.controller");
 
 app.get("/api", getAPI);
 

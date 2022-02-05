@@ -214,13 +214,13 @@ describe("DELETE comment", () => {
     return request(app).delete("/api/comments/1/").expect(204);
   });
 });
-describe.only("GET API", () => {
-  test("responds with 200 & endpoint JSON", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then((res) => {
-        console.log(res.body);
-      });
-  });
-});
+// describe("GET API", () => {
+//   test("responds with 200 & endpoint JSON", () => {
+//     return request(app)
+//       .get("/api")
+//       .expect(200)
+//       .then((res) => {
+//         console.log(res.body);
+//       });
+//   });
+// });
