@@ -8,4 +8,3 @@ const runSeed = () => {
 };
 
 runSeed();
-// changed dev to test etc
