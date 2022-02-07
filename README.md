@@ -7,7 +7,6 @@ Please insure Node.js and Postgres (PSQL) are installed to run the project, and 
 The project is hosted at:
 
 ## To begin: .env files
-
 Please create 2 `.env` files:
 `.env.development` &
 `.env.test`, Into each, add PGDATABASE=<database_name_here>, with the correct database name for that environment (see /db/setup.sql for the database names)
