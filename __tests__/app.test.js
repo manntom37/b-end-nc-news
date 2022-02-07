@@ -1,11 +1,13 @@
 const db = require("../db/connection.js");
+
 const testData = require("../db/data/test-data/index.js");
+const devData = require("../db/data/development-data/index");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const app = require("../app");
 const { get } = require("superagent");
 
-beforeEach(() => seed(testData));
+beforeEach(() => seed(devData));
 afterAll(() => db.end());
 
 describe("GET /api/topics", () => {
