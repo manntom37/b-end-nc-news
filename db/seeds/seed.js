@@ -1,6 +1,5 @@
 const db = require("../connection.js");
 const format = require("pg-format");
-
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
   return db
