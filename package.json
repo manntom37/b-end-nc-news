@@ -9,7 +9,6 @@
     "test": "jest",
     "seed:prod": "NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) npm run seed",
     "start": "node listen.js"
-
   },
   "repository": {
     "type": "git",
@@ -23,6 +22,7 @@
   },
   "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^14.1.0",
     "express": "^4.17.2",
     "jest": "^27.4.7",
