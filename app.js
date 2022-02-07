@@ -1,4 +1,5 @@
 const cors = require('cors');
+const app = express();
 app.use(cors());
 
 const express = require("express");
@@ -24,7 +25,7 @@ const {
 } = require("./controllers/removeCommentById.controllers");
 
 const { reduce } = require("./db/data/test-data/articles");
-const app = express();
+
 
 app.use(express.json());
 
