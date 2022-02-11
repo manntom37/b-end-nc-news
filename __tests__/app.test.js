@@ -62,7 +62,7 @@ describe("PATCH /api/articles/:article_id", () => {
 
   test("Patch a specific article by DECREASING votes", () => {
     return request(app)
-      .patch("/api/articles/1")
+      .patch("/api/articles/1") 
       .send({ inc_votes: -10 })
       .expect(200)
       .then(({ body }) => {
