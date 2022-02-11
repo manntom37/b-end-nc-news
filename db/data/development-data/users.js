@@ -36,9 +36,8 @@ module.exports = [
       "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
   },
   {
-    username: "tom",
-    name: "Tom Mann",
-    avatar_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
+    username: "loyle_capo_chrissy",
+    name: "Christopher Moltisanti",
+    avatar_url: "https://f4.bcbits.com/img/0020435433_20.jpg",
   },
 ];
