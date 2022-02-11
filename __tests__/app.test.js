@@ -137,7 +137,7 @@ describe("GET /api/articles?query=???", () => {
       });
   });
   test("/api/articles?author=rogersop&order=asc = 200 code & array of articles with author 'rogersop' order by ASC", () => {
-    return request(app)
+    return request(app) 
       .get("/api/articles?author=rogersop&order=asc")
       .expect(200)
       .then((res) => {
