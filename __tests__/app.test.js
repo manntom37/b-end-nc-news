@@ -7,8 +7,19 @@ const request = require("supertest");
 const app = require("../app");
 const { get } = require("superagent");
 
-beforeEach(() => seed(devData));
+beforeEach(() => seed(testData));
 afterAll(() => db.end());
+
+describe("Inexistent routes", () => {
+  test("status:404, and not found message", () => {
+    return request(app)
+      .get("/notaroute")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Route Not Found");
+      });
+  });
+});
 
 describe("GET /api/topics", () => {
   test("responds with 200 code & array of treasures", () => {
@@ -47,7 +58,25 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
+  test("status:400, when input is an invalid article ID ", () => {
+    return request(app)
+      .get("/api/articles/not_an_id_sorry")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Sorry - Bad Request");
+      });
+  });
+
+  test("GET status: 404, when input is valid but does not exist in the database ", () => {
+    return request(app)
+      .get("/api/articles/999999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not Found");
+      });
+  });
 });
+
 describe("PATCH /api/articles/:article_id", () => {
   test("Patch a specific article by article ID", () => {
     return request(app)
@@ -61,8 +90,8 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 
   test("Patch a specific article by DECREASING votes", () => {
-    return request(app) 
-      .patch("/api/articles/1") 
+    return request(app)
+      .patch("/api/articles/1")
       .send({ inc_votes: -10 })
       .expect(200)
       .then(({ body }) => {
@@ -78,6 +107,27 @@ describe("PATCH /api/articles/:article_id", () => {
       .then(({ body }) => {
         expect(body.article.votes).toBe(101);
         expect(body.article.article_id).toBe(1);
+      });
+  });
+  test("GET status:400, when inc_votes are empty ", () => {
+    const numberOfVotes = {};
+    return request(app)
+      .patch("/api/articles/1")
+      .send(numberOfVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Sorry - Bad Request");
+      });
+  });
+
+  test("GET status:400, when inc_votes are not a number ", () => {
+    const numberOfVotes = { inc_votes: "AAH" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(numberOfVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Sorry - Bad Request");
       });
   });
 });
@@ -114,6 +164,14 @@ describe("GET /api/articles?query=???", () => {
         });
       });
   });
+  test("GET status:400, when sort_by query does not exist ", () => {
+    return request(app)
+      .get("/api/articles?sort_by=not_a_real_query")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid Sort Query");
+      });
+  });
   test("responds with 200 code & array of articles with topic 'cats'", () => {
     return request(app)
       .get("/api/articles?topic=cats")
@@ -137,7 +195,7 @@ describe("GET /api/articles?query=???", () => {
       });
   });
   test("/api/articles?author=rogersop&order=asc = 200 code & array of articles with author 'rogersop' order by ASC", () => {
-    return request(app) 
+    return request(app)
       .get("/api/articles?author=rogersop&order=asc")
       .expect(200)
       .then((res) => {
@@ -185,7 +243,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("returns message for artile with no comments", () => {
+  test("returns message for article with no comments", () => {
     return request(app)
       .get("/api/articles/2/comments")
       .expect(200)
@@ -216,13 +274,3 @@ describe("DELETE comment", () => {
     return request(app).delete("/api/comments/1/").expect(204);
   });
 });
-// describe("GET API", () => {
-//   test("responds with 200 & endpoint JSON", () => {
-//     return request(app)
-//       .get("/api")
-//       .expect(200)
-//       .then((res) => {
-//         console.log(res.body);
-//       });
-//   });
-// });

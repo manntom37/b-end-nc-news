@@ -46,9 +46,20 @@ app.post("/api/articles/:article_id/comments", postArticleComment);
 
 app.delete("/api/comments/:comment_id", removeCommentById);
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(err.status).send("msg: error!");
+const {
+  handleCustomErrors,
+  handleSQLErrors,
+  handleInternalServerError,
+} = require("./controllers/errors");
+
+app.all("/*", (req, res, next) => {
+  res.status(404).send({ msg: "Route Not Found" });
 });
+
+app.use(handleCustomErrors);
+
+app.use(handleSQLErrors);
+
+app.use(handleInternalServerError);
 
 module.exports = app;

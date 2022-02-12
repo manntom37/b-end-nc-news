@@ -7,6 +7,13 @@ exports.fetchArticlesById = (article_id) => {
       [article_id]
     )
     .then((res) => {
-      return res.rows[0];
+      const article = res.rows[0];
+      if (!article) {
+        return Promise.reject({
+          status: 404,
+          msg: `Not Found`,
+        });
+      }
+      return article;
     });
 };

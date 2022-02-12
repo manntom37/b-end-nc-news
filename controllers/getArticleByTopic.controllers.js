@@ -2,13 +2,15 @@ const {
   fetchArticleByTopic,
 } = require("../models/fetchArticlesByTopic.models");
 
-exports.getArticleByTopic = (req, res) => {
-  const { topic } = req.body;
+exports.getArticleByTopic = (req, res, next) => {
+  if (topic) {
+    queryStr += ` WHERE articles.topic = $1`;
+    queryValues.push(topic);
+  }
 
-  console.log(topic);
-  // console.log(article_id)
-  fetchArticleByTopic(topic).then((articles) =>
-    // console.log(article, ' <<< controller')
-    res.status(200).send({ articles })
-  );
+  queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order_by}`;
+  const { topic } = req.body;
+  fetchArticleByTopic(topic)
+    .then((articles) => res.status(200).send({ articles }))
+    .catch(next);
 };
