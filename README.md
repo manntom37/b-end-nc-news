@@ -4,7 +4,7 @@ NC news is a full stack project built during my time at Northcoders.
 
 Please insure Node.js and Postgres (PSQL) are installed to run the project, and use 'npm start' to initialise.
 
-The project is hosted at:
+The project is hosted at: https://b-end-nc-news-tom-mann.herokuapp.com/api/
 
 ## To begin: .env files
 Please create 2 `.env` files:
